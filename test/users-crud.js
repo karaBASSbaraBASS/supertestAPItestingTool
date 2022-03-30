@@ -1,12 +1,12 @@
 import request from '../config/common';
 import { expect } from 'chai';
 import 'dotenv/config';
+import faker from 'faker';
 
 const TOKEN = process.env.TOKEN;
-let ts = Math.round((new Date()).getTime() / 1000);
 let generatedData = {
-    "name": `testUser${ts}`,
-    "email": `aligator${ts}@gmail.com`,
+    "name": faker.name.firstName(),
+    "email": faker.internet.email(),
     "gender": "male",
     "status": "active"
 };
@@ -24,8 +24,8 @@ let createdUserId;
                 .post(url)
                 .set('Authorization', `Bearer ${TOKEN}`)
                 .send(generatedData);
+
             expect(res.body.code).to.be.eq(201);
-            // generatedData.email = "ololo.com"
             // deep will iterate assertions
             expect(res.body.data).to.deep.include(generatedData);
             createdUserId = res.body.data.id;
@@ -35,6 +35,7 @@ let createdUserId;
         it('/users', async () => {
             const res = await request
                 .get(`users`);
+
             expect(res.body.data).to.not.be.empty;
         });
 
@@ -43,6 +44,7 @@ let createdUserId;
 
             const res = await request
                 .get(url);
+
             expect(res.body.data).to.not.be.empty;
             expect(res.body.meta.pagination.page).to.be.eq(5);
             res.body.data.forEach(element => {
@@ -59,6 +61,7 @@ let createdUserId;
                 .put(url)
                 .set('Authorization', `Bearer ${TOKEN}`)
                 .send(editedStatus);
+
             expect(res.body.code).to.be.eq(200);
             expect(res.body.data.status).to.be.eq(editedStatus.status);
         });
@@ -70,6 +73,7 @@ let createdUserId;
             const res = await request
                 .delete(url)
                 .set('Authorization', `Bearer ${TOKEN}`);
+
             expect(res.body.code).to.be.eq(204);
             expect(res.body.data).to.be.eq(null);
         });
