@@ -19,19 +19,19 @@ describe('Posts', () => {
     });
 
     describe('POST', () => {
-        it.only('/posts - POST - post can be created', async () => {
+        it('/posts - POST - post can be created', async () => {
             const postReq = await request
                 .post('posts/')
                 .set('Authorization', `Bearer ${TOKEN}`)
                 .send(postData);
-                
+
             expect(postReq.body.code).to.be.eq(201);    
             expect(postReq.body.data).to.deep.include(postData);
             createdPostId = postReq.body.data.id
         });
     });
     describe('GET', () => {
-        it.only('/posts/id - GET - created post can be reached', async () => {
+        it('/posts/id - GET - created post can be reached', async () => {
             const postReq = await request
                 .get(`posts/${createdPostId}`)
                 .set('Authorization', `Bearer ${TOKEN}`)
@@ -42,7 +42,7 @@ describe('Posts', () => {
         });
     });
     describe('DELETE', () => {
-        it.only('/posts/id - DELETE - post can be deleted', async () => {
+        it('/posts/id - DELETE - post can be deleted', async () => {
             const postReq = await request
                 .delete(`posts/${createdPostId}`)
                 .set('Authorization', `Bearer ${TOKEN}`);
