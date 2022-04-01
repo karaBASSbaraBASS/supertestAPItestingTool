@@ -19,27 +19,48 @@ describe('Posts', () => {
     });
 
     describe('POST', () => {
-        it('/posts can be created', async () => {
-            const url = 'posts';
-           
+        it.only('/posts - POST - post can be created', async () => {
             const postReq = await request
                 .post('posts/')
                 .set('Authorization', `Bearer ${TOKEN}`)
                 .send(postData);
+                
             expect(postReq.body.code).to.be.eq(201);    
             expect(postReq.body.data).to.deep.include(postData);
             createdPostId = postReq.body.data.id
         });
     });
+    describe('GET', () => {
+        it.only('/posts/id - GET - created post can be reached', async () => {
+            const postReq = await request
+                .get(`posts/${createdPostId}`)
+                .set('Authorization', `Bearer ${TOKEN}`)
+                .send(postData);
+            
+            expect(postReq.body.code).to.be.eq(200);    
+            expect(postReq.body.data).to.deep.include(postData);
+        });
+    });
+    describe('DELETE', () => {
+        it.only('/posts/id - DELETE - post can be deleted', async () => {
+            const postReq = await request
+                .delete(`posts/${createdPostId}`)
+                .set('Authorization', `Bearer ${TOKEN}`);
+
+            expect(postReq.body.code).to.be.eq(204);
+            expect(postReq.body.data).to.be.eq(null);
+        });
+    });
+
     describe('POST negative tests', () => {
-        it('/posts data validation error', async () => {
+        it('/posts - POST - post data validation error', async () => {
             const postReq = await request
                 .post('posts/')
                 .set('Authorization', `Bearer ${TOKEN}`)
                 .send(faker.lorem.sentence());
             expect(postReq.body.code).to.be.eq(422); 
         });
-        it('/posts autentivation failed', async () => {
+        it('/posts - POST - unautentificated user cant make post', async () => {
             const postReq = await request
                 .post('posts/')
                 .send(postData);

@@ -18,7 +18,7 @@ describe('Users', () => {
 let createdUserId;
 
     describe('POST', () => {
-        it('/user can be created', async () => {
+        it('/user - POST - user can be created', async () => {
             const url = 'users';
             const res = await request
                 .post(url)
@@ -32,14 +32,14 @@ let createdUserId;
         });
     });
     describe('GET', () => {
-        it('/users', async () => {
+        it('/users - GET - show info about all users', async () => {
             const res = await request
                 .get(`users`);
 
             expect(res.body.data).to.not.be.empty;
         });
 
-        it('/users with paramrters', async () => {
+        it('/users?values - GET - show info about active females', async () => {
             const url = 'users?page=5&gender=female&status=active';
 
             const res = await request
@@ -54,7 +54,7 @@ let createdUserId;
         });
     });
     describe('PUT', () => {
-        it('/user:id can be edited', async () => {
+        it('/users/id - PUT - user data can be edited', async () => {
             const url = `users/${createdUserId}`;
 
             const res = await request
@@ -67,7 +67,7 @@ let createdUserId;
         });
     });
     describe('DELETE', () => {
-        it('/users', async () => {
+        it('/users/id - DELETE - user data can be deleted', async () => {
             const url = `users/${createdUserId}`;
 
             const res = await request
